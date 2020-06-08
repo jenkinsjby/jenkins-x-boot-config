@@ -1,35 +1,46 @@
+autoUpdate:
+  enabled: false
+bootConfigURL: https://github.com/jenkins-x/jenkins-x-boot-config.git
 cluster:
-  clusterName: ""
-  environmentGitOwner: ""
-  environmentGitPublic: false
-  project: ""
-  provider: gke
-  zone: ""
-gitops: true
+  clusterName: p50
+  environmentGitOwner: jenkinsjby
+  gitKind: github
+  gitName: github
+  gitServer: https://github.com
+  namespace: e2e-jx
+  provider: kubernetes
+  registry: 192.168.0.37
+  dockerRegistryOrg: caladreas
 environments:
-- key: dev
-- key: staging
-- key: production
+- ingress:
+    domain: "apps-crc.testing"
+    externalDNS: false
+    ignoreLoadBalancer: true
+    namespaceSubDomain: "-dev."
+  key: dev
+  repository: p50-dev
+- ingress:
+    domain: "apps-crc.testing"
+    namespaceSubDomain: "-staging."
+  key: staging
+  repository: p50-staging
+- ingress:
+    domain: "apps-crc.testing"
+    namespaceSubDomain: "-prod."
+  key: production
+  repository: p50-prod
+gitops: true
 ingress:
-  domain: ""
+  domain: apps-crc.testing
   externalDNS: false
-  tls:
-    email: ""
-    enabled: false
-    production: false
+  ignoreLoadBalancer: true
+  namespaceSubDomain: -jx.
 kaniko: true
+repository: nexus
 secretStorage: local
-storage:
-  logs:
-    enabled: false
-    url: ""
-  reports:
-    enabled: false
-    url: ""
-  repository:
-    enabled: false
-    url: ""
+velero:
+  namespace: e2e-jx-velero
 versionStream:
-  ref: "master"
+  ref: master
   url: https://github.com/jenkins-x/jenkins-x-versions.git
-webhook: lighthouse
+webhook: prow
